@@ -14,20 +14,20 @@ object GdeServer {
   def stream[F[_]: ConcurrentEffect](implicit T: Timer[F], C: ContextShift[F]): Stream[F, Nothing] = {
     for {
       client <- BlazeClientBuilder[F](global).stream
-      helloWorldAlg = HelloWorld.impl[F]
-      jokeAlg = Jokes.impl[F](client)
+      helloWorldAlg = TramsAlgebra.impl[F]
+      jokeAlg = Users.impl[F](client)
 
       // Combine Service Routes into an HttpApp.
       // Can also be done via a Router if you
       // want to extract a segments not checked
       // in the underlying routes.
       httpApp = (
-        GdeRoutes.helloWorldRoutes[F](helloWorldAlg) <+>
-        GdeRoutes.jokeRoutes[F](jokeAlg)
+        GdeRoutes.tramsRoutes[F](helloWorldAlg) <+>
+        GdeRoutes.usersRoutes[F](jokeAlg)
       ).orNotFound
 
       // With Middlewares in place
-      finalHttpApp = Logger.httpApp(true, true)(httpApp)
+      finalHttpApp = Logger.httpApp(logHeaders = true, logBody = true)(httpApp)
 
       exitCode <- BlazeServerBuilder[F]
         .bindHttp(8080, "0.0.0.0")
