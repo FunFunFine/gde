@@ -3,10 +3,12 @@ package io.funfunfine.gde
 import cats.effect.{ConcurrentEffect, ContextShift, Timer}
 import cats.implicits._
 import fs2.Stream
+import io.funfunfine.gde.algebras.UsersAlgebra
 import org.http4s.client.blaze.BlazeClientBuilder
 import org.http4s.implicits._
 import org.http4s.server.blaze.BlazeServerBuilder
 import org.http4s.server.middleware.Logger
+
 import scala.concurrent.ExecutionContext.global
 
 object GdeServer {
@@ -15,7 +17,7 @@ object GdeServer {
     for {
       client <- BlazeClientBuilder[F](global).stream
       helloWorldAlg = TramsAlgebra.impl[F]
-      jokeAlg = Users.impl[F](client)
+      jokeAlg = UsersAlgebra.impl[F](client)
 
       // Combine Service Routes into an HttpApp.
       // Can also be done via a Router if you

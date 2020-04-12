@@ -8,6 +8,7 @@ import eu.timepit.refined.types.string.NonEmptyString
 import io.funfunfine.gde.domain.{Destination, UserId}
 import org.http4s.{EntityDecoder, HttpRoutes}
 import io.circe.syntax._
+import io.funfunfine.gde.algebras.{TramsAlgebra, UsersAlgebra}
 import org.http4s.circe._
 import org.http4s.dsl.Http4sDsl
 
@@ -24,7 +25,7 @@ object GdeRoutes {
   implicit def findTramDecoder[F[_]:Sync]: EntityDecoder[F, FindTram] = jsonOf[FindTram]
 
 
-  def usersRoutes[F[_]: Sync](users: Users[F]): HttpRoutes[F] = {
+  def usersRoutes[F[_]: Sync](users: UsersAlgebra[F]): HttpRoutes[F] = {
     val dsl = new Http4sDsl[F]{}
     import dsl._
 
