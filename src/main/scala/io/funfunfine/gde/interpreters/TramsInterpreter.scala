@@ -6,7 +6,7 @@ import io.funfunfine.gde.algebras.repositories.UserRepositoryAlgebra
 import io.funfunfine.gde.algebras.{TramsAlgebra, WhereIsTramClientAlgebra}
 import io.funfunfine.gde.domain._
 import cats.FunctorFilter.Ops
-
+import tofu.syntax.foption._
 class TramsInterpreter[F[_]: MonadError[*[_], Throwable]: Parallel](userRepo: UserRepositoryAlgebra[F],
                                               whereIsTram: WhereIsTramClientAlgebra[F])
     extends TramsAlgebra[F] {
@@ -15,7 +15,7 @@ class TramsInterpreter[F[_]: MonadError[*[_], Throwable]: Parallel](userRepo: Us
                         fromDestination: Destination,
                         toDestination: Destination): F[Option[List[(Place, Tram)]]] =
     for {
-      User(_, places) <- userRepo.get(userId).flatMap(_.fold(new Exception("no user").raiseError[F,User])(_.pure[F]))
+      User(_, places) <- userRepo.get(userId).orThrow(new Exception("no user"))
       allTramsFrom <- places
                        .get(fromDestination)
                        .traverse(

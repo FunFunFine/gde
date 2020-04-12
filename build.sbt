@@ -6,6 +6,7 @@ val CanoeVersion = "0.4.1"
 val NewtypeVersion = "0.4.3"
 val RefinedVersion = "0.9.13"
 val derevoVersion = "0.11.1"
+val tofuVersion = "0.7.3"
 
 lazy val root = (project in file("."))
   .settings(
@@ -26,7 +27,8 @@ lazy val root = (project in file("."))
       "org.specs2"     %% "specs2-core"           % Specs2Version % "test",
       "ch.qos.logback" % "logback-classic"        % LogbackVersion,
       "org.manatki"    %% "derevo-cats"           % derevoVersion,
-      "org.manatki"    %% "derevo-circe-magnolia" % derevoVersion
+      "org.manatki"    %% "derevo-circe-magnolia" % derevoVersion,
+      "ru.tinkoff"     %% "tofu"                  % tofuVersion
     ),
     addCompilerPlugin("org.typelevel" %% "kind-projector"     % "0.10.3"),
     addCompilerPlugin("com.olegpy"    %% "better-monadic-for" % "0.3.0")
@@ -34,7 +36,8 @@ lazy val root = (project in file("."))
 
 scalacOptions ++= Seq(
   "-deprecation",
-  "-encoding", "UTF-8",
+  "-encoding",
+  "UTF-8",
   "-language:higherKinds",
   "-language:postfixOps",
   "-feature",
